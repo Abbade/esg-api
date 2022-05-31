@@ -3,6 +3,8 @@ const bcrypt = require('bcrypt')
 const jwt = require('jwt-simple')
 const { authSecret } = require('../.env')
 const responses = require('../config/responses')
+require('dotenv').config();
+
 
 recuperar = async (id) => {
   try {
@@ -30,6 +32,7 @@ cadastrar = async (user) => {
     return responses.responseMessage(true, responses.USER_CREATED, rows[0].id);
 
   } catch (error) {
+    console.log(error);
     throw new Error(responses.GENERIC_ERROR);
   }
 
@@ -60,7 +63,7 @@ login =  async (email, password) => {
           success: true,
           name: user.nome,
           email: user.email,
-          token: jwt.encode(payload, authSecret),
+          token: jwt.encode(payload, process.env.AUTH_SECRET),
         };
 
       }
@@ -74,6 +77,7 @@ login =  async (email, password) => {
 
     
   } catch (error) {
+    console.log(error);
     throw new Error(responses.GENERIC_ERROR);
   }  
 }

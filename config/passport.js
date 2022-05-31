@@ -2,10 +2,13 @@ const { authSecret } = require('../.env')
 const db = require('../config/db')
 const passport = require('passport')
 const passportJwt = require('passport-jwt')
+require('dotenv').config();
+
 const { Strategy, ExtractJwt } = passportJwt
 
+
 const params = {
-    secretOrKey: authSecret,
+    secretOrKey: process.env.AUTH_SECRET,
     jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
 }
 

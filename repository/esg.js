@@ -7,6 +7,7 @@ getEsgType = async () => {
     return rows;
 
   } catch (error) {
+    console.log(error);
     throw new Error(responses.GENERIC_ERROR);
   }
 }

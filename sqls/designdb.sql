@@ -4,6 +4,7 @@ CREATE TABLE userSystem (
   passwordSystem VARCHAR    ,
   name VARCHAR    ,
   active BOOL      ,
+  emailId VARCHAR,
 PRIMARY KEY(id));
 
 
@@ -37,6 +38,7 @@ CREATE TABLE feedback (
   subject_id INTEGER   NOT NULL ,
   esg_id INTEGER   NOT NULL ,
   description VARCHAR      ,
+  email VARCHAR,
 PRIMARY KEY(id)    ,
   FOREIGN KEY(esg_id)
     REFERENCES esg(id),
@@ -50,5 +52,3 @@ CREATE INDEX feedback_FKIndex2 ON feedback (subject_id);
 
 CREATE INDEX IFK_Rel_01 ON feedback (esg_id);
 CREATE INDEX IFK_Rel_03 ON feedback (subject_id);
-
-

@@ -1,10 +1,19 @@
 const { Pool, Client } = require('pg')
 const { GENERIC_ERROR } = require('./responses')
 const env = require('../.env')
+require('dotenv').config();
 
 //const pool = new Pool()
 
-const pool = new Pool(env.pool)
+const poolEnv =  {
+    user: process.env.USER,
+    host: process.env.HOST,
+    database: process.env.DATABASE,
+    password: process.env.PASSWORD,
+    port: process.env.PORT
+}
+
+const pool = new Pool(poolEnv)
 pool.on('error', (err, client) => {
     console.error('Unexpected error on idle client', err)
     process.exit(-1)
