@@ -1,6 +1,5 @@
 const { Pool, Client } = require('pg')
 const { GENERIC_ERROR } = require('./responses')
-const env = require('../.env')
 require('dotenv').config();
 
 //const pool = new Pool()

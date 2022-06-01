@@ -1,7 +1,6 @@
 const db = require('../config/db')
 const bcrypt = require('bcrypt')
 const jwt = require('jwt-simple')
-const { authSecret } = require('../.env')
 const responses = require('../config/responses')
 require('dotenv').config();
 
