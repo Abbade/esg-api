@@ -1,5 +1,6 @@
 const db = require('../config/db')
-
+const mailer = require('../config/mailer')
+const responses = require('../config/responses')
 
 getEsgType = async () => {
   try {
@@ -24,11 +25,18 @@ getEsgSubjects = async (esgId) => {
 
 create = async (feedback) => {
   try {
-    let rows = await db.query('INSERT INTO feedback (subject_id, esg_id, description, email) VALUES($1, $2, $3, $4)', [feedback.subject_id, feedback.esg_id, feedback.description, feedback.email])
+    let rows = await db.query('INSERT INTO feedback (subject_id, esg_id, description, email) VALUES($1, $2, $3, $4)', [feedback.subject_id, feedback.esg_id, feedback.description, feedback.email]);
+
+    let rowsSubject = await db.query("select * from responseemail where subject_id = $1", [feedback.subject_id]);
+
+    let text = rowsSubject[0]?.name;
+
+    mailer.mail( feedback.email, '[RES] ESG Feedback ' + text, text)
     return {message: "Create successfully"};
 
   } catch (error) {
-    throw new Error(responses.GENERIC_ERROR);
+    console.log(error);
+    throw new Error(responses.GENERIC_ERROR);n
   }
 }
 

@@ -13,7 +13,9 @@ const params = {
 
 const  strategy = new Strategy(params, async (payload, done) => {
     try {
+        console.log("teste")
         var row = await db.query('select id, email from userSystem where id = $1', [payload.id]);
+        console.log(row);
         let user = row[0];
         if (user) {
             done(null, { id: user.id, email: user.email })

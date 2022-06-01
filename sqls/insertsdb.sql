@@ -51,3 +51,15 @@ VALUES(3, 'Corruption');
 INSERT INTO public.subject
 (esg_id, "name")
 VALUES(3, 'Data Leak');
+
+INSERT INTO public.responseemail
+(subject_id, "name")
+VALUES(1, 'To help reduce water costs, our headquarters has a rainwater harvesting system.');
+
+INSERT INTO public.responseemail
+(subject_id, "name")
+VALUES(2, 'To help reduce light consumption, all head office lamps are LED lamps.');
+
+INSERT INTO public.responseemail
+(subject_id, "name")
+VALUES(3, 'All company documents are now only virtual documents.');

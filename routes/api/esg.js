@@ -41,7 +41,7 @@ router.post('/feedback', async function (req, res){
 
 })
 
-router.get('/feedback', async function (req, res){
+router.get('/feedback',passport.authenticate(), async function (req, res){
   try {
     let response = await esg.getFeedback();
     return  res.status(200).json(response) ;

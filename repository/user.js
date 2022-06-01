@@ -3,7 +3,12 @@ const bcrypt = require('bcrypt')
 const jwt = require('jwt-simple')
 const responses = require('../config/responses')
 require('dotenv').config();
+const { OAuth2Client } = require('google-auth-library');
+const { 
+  v4: uuidv4,
+} = require('uuid');
 
+const client = new OAuth2Client(process.env.REACT_APP_GOOGLE_CLIENT_ID);
 
 recuperar = async (id) => {
   try {
@@ -26,13 +31,68 @@ cadastrar = async (user) => {
     if(userEmails[0]){
       return responses.error(responses.USER_ALREADY_EXIST);
     }
-
-    let rows = await db.query('INSERT INTO userSystem (email, passwordSystem, name, active) VALUES($1, $2, $3, true) RETURNING id', [user.email, user.passwordSystem, user.name])
+    let emailId = uuid.v4();
+    let rows = await db.query('INSERT INTO userSystem (email, passwordSystem, name, active, emailid) VALUES($1, $2, $3, true, $4) RETURNING id', [user.email, user.passwordSystem, user.name, emailId])
     return responses.responseMessage(true, responses.USER_CREATED, rows[0].id);
 
   } catch (error) {
     console.log(error);
     throw new Error(responses.GENERIC_ERROR);
+  }
+
+}
+
+loginWithGoogle = async (loginData) => {
+  console.log(loginData);
+  const ticket = await client.verifyIdToken({
+    idToken: loginData.token,
+    audience: process.env.CLIENT_ID,
+  });
+  console.log(ticket);
+  const { name, email  } = ticket.getPayload();
+  let qr = `
+  select id, name, email, active from userSystem where email = $1
+  `;
+  let rowsUser = await db.query(qr, [email]);
+  console.log(rowsUser);
+  let user = rowsUser[0];
+  if(user){
+    const payload =    {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      active: user.active
+    }
+    return {
+      success: true,
+      name: name,
+      email: email,
+      active: user.active,
+      token: jwt.encode(payload, process.env.AUTH_SECRET),
+    };
+  }
+  else{
+    let emailId = uuid.v4();
+    let qrInsert = `
+    INSERT INTO public.usersystem
+      (email, "name", active, emailid)
+      VALUES($1, $2, false, $3) RETURNING id
+    `;
+    let rowsUserInsert = await db.query(qrInsert, [email, name, emailId]);
+    let userId = rowsUserInsert[0];
+    const payloadInsert =    {
+      id: userId,
+      name: name,
+      email: email,
+      active: false
+    }
+    return {
+      success: true,
+      name: name,
+      email: email,
+      active: false,
+      token: jwt.encode(payloadInsert, process.env.AUTH_SECRET),
+    };
   }
 
 }
@@ -85,6 +145,7 @@ login =  async (email, password) => {
 module.exports = {
   recuperar,
   cadastrar,
-  login
+  login,
+  loginWithGoogle
 }
 

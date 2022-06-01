@@ -42,4 +42,21 @@ router.post('/login', async function(req, res, next){
   
 });
 
+router.post('/logingoogle', async function(req, res, next){
+  try {
+
+    if (!req.body.token ) {
+      return res.status(400).send(MISSING_DATA)
+    }
+    var response = await user.loginWithGoogle(req.body);
+    return response.success ? res.status(200).json(response) : res.status(400).json(response);;
+  } 
+  catch (error) { 
+    console.log(error) 
+    return res.status(500).json(error)
+  }
+  
+  
+});
+
 module.exports = router;

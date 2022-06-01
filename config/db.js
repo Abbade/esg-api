@@ -10,7 +10,10 @@ const poolEnv =  {
     database: process.env.DATABASE,
     password: process.env.PASSWORD,
     port: process.env.DB_PORT,
-    ssl: { rejectUnauthorized: false }
+}
+
+if(process.env.NODE_ENV === 'production'){
+    poolEnv.ssl = { rejectUnauthorized: false };
 }
 
 const pool = new Pool(poolEnv)

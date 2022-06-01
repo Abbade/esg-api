@@ -52,3 +52,22 @@ CREATE INDEX feedback_FKIndex2 ON feedback (subject_id);
 
 CREATE INDEX IFK_Rel_01 ON feedback (esg_id);
 CREATE INDEX IFK_Rel_03 ON feedback (subject_id);
+
+
+CREATE TABLE ResponseEmail (
+  id SERIAL  NOT NULL ,
+  subject_id INTEGER  unique NOT NULL ,
+  name VARCHAR      ,
+PRIMARY KEY(id)  ,
+  FOREIGN KEY(subject_id)
+    REFERENCES subject(id));
+
+
+CREATE INDEX ResponseEmail_FKIndex1 ON ResponseEmail (subject_id);
+
+
+CREATE INDEX IFK_Rel_04 ON ResponseEmail (subject_id);
+
+
+
+
