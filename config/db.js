@@ -9,7 +9,7 @@ const poolEnv =  {
     host: process.env.HOST,
     database: process.env.DATABASE,
     password: process.env.PASSWORD,
-    port: process.env.PORT
+    port: process.env.DB_PORT
 }
 
 const pool = new Pool(poolEnv)

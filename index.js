@@ -20,6 +20,6 @@ app.get('/', (req, res) =>{
     res.status(200).send('Meu backend!')
 }) 
 
-app.listen(3030, () => {
+app.listen(process.env.PORT || 80, () => {
     console.log("iniciado")
 })
