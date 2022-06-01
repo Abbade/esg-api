@@ -68,6 +68,8 @@ CREATE INDEX ResponseEmail_FKIndex1 ON ResponseEmail (subject_id);
 
 CREATE INDEX IFK_Rel_04 ON ResponseEmail (subject_id);
 
+ALTER TABLE public.usersystem ADD emailid varchar NULL;
+
 
 
 

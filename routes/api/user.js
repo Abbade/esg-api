@@ -59,4 +59,24 @@ router.post('/logingoogle', async function(req, res, next){
   
 });
 
+router.get('/', passport.authenticate(), async function(req, res, next){
+  try {
+    var response = await user.getUsers();
+    res.status(200).json(response);
+  } catch (error) {
+    res.status(500).json(error)
+  }
+
+});
+
+router.put('/changestatus', passport.authenticate(), async function(req, res, next){
+  try {
+    var response = await user.changeStatus(req.body);
+    res.status(200).json(response);
+  } catch (error) {
+    res.status(500).json(error)
+  }
+
+});
+
 module.exports = router;

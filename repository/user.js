@@ -5,9 +5,9 @@ const responses = require('../config/responses')
 require('dotenv').config();
 const { OAuth2Client } = require('google-auth-library');
 const { 
+  v1: uuidv1,
   v4: uuidv4,
 } = require('uuid');
-
 const client = new OAuth2Client(process.env.REACT_APP_GOOGLE_CLIENT_ID);
 
 recuperar = async (id) => {
@@ -31,7 +31,7 @@ cadastrar = async (user) => {
     if(userEmails[0]){
       return responses.error(responses.USER_ALREADY_EXIST);
     }
-    let emailId = uuid.v4();
+    let emailId = uuidv4();
     let rows = await db.query('INSERT INTO userSystem (email, passwordSystem, name, active, emailid) VALUES($1, $2, $3, true, $4) RETURNING id', [user.email, user.passwordSystem, user.name, emailId])
     return responses.responseMessage(true, responses.USER_CREATED, rows[0].id);
 
@@ -72,7 +72,7 @@ loginWithGoogle = async (loginData) => {
     };
   }
   else{
-    let emailId = uuid.v4();
+    let emailId = uuidv4();
     let qrInsert = `
     INSERT INTO public.usersystem
       (email, "name", active, emailid)
@@ -140,12 +140,33 @@ login =  async (email, password) => {
     throw new Error(responses.GENERIC_ERROR);
   }  
 }
+getUsers = async () => {
+  try {
+    let rows = await db.query("SELECT * FROM userSystem order by name");
+    return rows;
 
+  } catch (error) {
+    console.log(error);
+    throw new Error(responses.GENERIC_ERROR);
+  }
+}
+changeStatus = async (body) => {
+  try {
+    let rows = await db.query("UPDATE userSystem set active = $1 where id = $2", [body.active, body.id]);
+    return {sucess: true};
+
+  } catch (error) {
+    console.log(error);
+    throw new Error(responses.GENERIC_ERROR);
+  }
+}
 
 module.exports = {
   recuperar,
   cadastrar,
   login,
-  loginWithGoogle
+  loginWithGoogle,
+  getUsers,
+  changeStatus
 }
 

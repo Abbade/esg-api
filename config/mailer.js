@@ -3,6 +3,9 @@ require('dotenv').config();
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 mail = (to, subject, text) => {
+  console.log(to);
+  console.log(subject);
+  console.log(text);
   const msg = {
     to: to, // Change to your recipient
     from: "esg.feedback1@gmail.com", // Change to your verified sender
@@ -16,6 +19,7 @@ mail = (to, subject, text) => {
     })
     .catch((error) => {
       console.error(error);
+      console.error(error.response.body);
     });
 };
 module.exports = {

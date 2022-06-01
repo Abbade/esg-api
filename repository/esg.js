@@ -29,11 +29,16 @@ create = async (feedback) => {
 
     let rowsSubject = await db.query("select * from responseemail where subject_id = $1", [feedback.subject_id]);
 
-    let text = rowsSubject[0]?.name;
-
-    mailer.mail( feedback.email, '[RES] ESG Feedback ' + text, text)
+    let textrow = rowsSubject[0];
+    if(textrow){
+      let text = textrow.name;
+      mailer.mail( feedback.email, '[RES] ESG Feedback ', text)
+    }
+    else{
+      console.log("feedback not found")
+    
+    }
     return {message: "Create successfully"};
-
   } catch (error) {
     console.log(error);
     throw new Error(responses.GENERIC_ERROR);n
